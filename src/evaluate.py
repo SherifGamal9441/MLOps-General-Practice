@@ -3,7 +3,7 @@ from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score
 from pathlib import Path
 
 # Setup paths dynamically (assuming this file is in 'src')
-ROOT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = Path(__file__).resolve().parent.parent
 REPORTS_DIR = ROOT_DIR / "reports"
 
 def evaluate_model(model, X, y, filename="confusion_matrix.png"):

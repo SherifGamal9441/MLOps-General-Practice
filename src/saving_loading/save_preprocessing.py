@@ -2,7 +2,7 @@ import pandas as pd
 from pathlib import Path
 
 # Setup paths dynamically (assuming this file is in 'src')
-ROOT_DIR = Path(__file__).resolve().parent.parent
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 PROCESSED_DATA_DIR = ROOT_DIR / "data" / "processed"
 
 def save_data(X, y, X_filename="X_processed.csv", y_filename="y.csv"):

@@ -1,20 +1,13 @@
-from sklearn.pipeline import Pipeline
-from saving_loading.save_model import save_pipeline
-def train(model, preprocessor, X, y):
-    
-    print("Assembling pipeline...")
-    pipeline = Pipeline(steps=[
-        ('preprocessor', preprocessor),
-        ('classifier', model)
-    ])
+from src.saving_loading.save_model import save_model
+def train(model, X, y):
     
     print("Training model...")
-    pipeline.fit(X, y)
+    model.fit(X, y)
     
     # Call the external save process
     print("Saving artifact...")
-    save_pipeline(pipeline)
+    save_model(model)
     
     # Return the fitted pipeline to main.py for immediate evaluation
-    return pipeline
+    return model
     
