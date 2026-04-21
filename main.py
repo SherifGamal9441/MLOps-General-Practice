@@ -7,7 +7,7 @@ import sklearn.ensemble
 import sklearn.linear_model
 
 from src.saving_loading.save_preprocessing import save_data
-from src.preprossesor import preprocess 
+from src.preprossesor import preprocess
 from src.train import train
 from src.evaluate import evaluate_model
 
@@ -19,6 +19,7 @@ X_PATH = PROCESSED_DIR / "X.csv"
 Y_PATH = PROCESSED_DIR / "y.csv"
 CONFIG_PATH = ROOT_DIR / "config" / "model.yaml"
 
+
 def main():
     print("=== Starting ML Orchestration Pipeline ===\n")
 
@@ -26,10 +27,10 @@ def main():
     print("[CONFIG] Loading model parameters...")
     with open(CONFIG_PATH, "r") as file:
         config = yaml.safe_load(file)
-    
-    model_name = config['model']['name']
-    model_params = config['model']['params']
-    
+
+    model_name = config["model"]["name"]
+    model_params = config["model"]["params"]
+
     param_string = "_".join([f"{k}-{v}" for k, v in model_params.items()])
     artifact_base_name = f"{model_name}_{param_string}"
     print(f"Active Configuration: {artifact_base_name}")
@@ -42,23 +43,23 @@ def main():
     else:
         print("\n[DATA] Processed features NOT found. Loading raw data...")
         raw_df = pd.read_csv(RAW_DATA_PATH)
-        
+
         print("[PREPROCESSING] Executing transformation pipeline...")
-        X_raw = raw_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]
-        y = raw_df['Survived']
-        
-        preprocessor_obj = preprocess() 
+        X_raw = raw_df[["Pclass", "Sex", "Age", "SibSp", "Parch", "Fare", "Embarked"]]
+        y = raw_df["Survived"]
+
+        preprocessor_obj = preprocess()
         X_processed_array = preprocessor_obj.fit_transform(X_raw)
-        
+
         feature_names = preprocessor_obj.get_feature_names_out()
         X_processed = pd.DataFrame(X_processed_array, columns=feature_names)
-        
+
         save_data(X_processed, y, X_filename="X.csv", y_filename="y.csv")
         X = X_processed
 
     # --- 3. Dynamic Model Instantiation ---
     print(f"\n[INIT] Dynamically loading {model_name}...")
-    
+
     # Check which module contains the requested model
     if hasattr(sklearn.ensemble, model_name):
         model_class = getattr(sklearn.ensemble, model_name)
@@ -66,8 +67,10 @@ def main():
         model_class = getattr(sklearn.linear_model, model_name)
     else:
         # Failsafe if you type a model name wrong in the YAML
-        raise ValueError(f"Model '{model_name}' not found in sklearn.ensemble or sklearn.linear_model.")
-    
+        raise ValueError(
+            f"Model '{model_name}' not found in sklearn.ensemble or sklearn.linear_model."
+        )
+
     # Instantiate the model by passing the dictionary as kwargs
     model = model_class(**model_params)
 
@@ -78,8 +81,9 @@ def main():
     # --- 5. Evaluation ---
     print("\n[EVALUATION] Generating Metrics and Visualizations...")
     evaluate_model(trained_model, X, y, artifact_base_name)
-    
+
     print("\n=== Pipeline Execution Complete ===")
+
 
 if __name__ == "__main__":
     main()
