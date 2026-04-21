@@ -2,7 +2,7 @@ import joblib
 from pathlib import Path
 
 # Setup paths dynamically (assuming save_model.py is inside the 'src' folder)
-ROOT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = Path(__file__).resolve().parent.parent
 ARTIFACTS_DIR = ROOT_DIR / "artifacts"
 
 def save_pipeline(pipeline_object, filename="titanic_pipeline.joblib"):
