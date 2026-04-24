@@ -1,5 +1,6 @@
 import pandas as pd
-import yaml
+import hydra
+from omegaconf import DictConfig, OmegaConf
 from pathlib import Path
 
 # 1. Import the modules themselves, not the specific classes
@@ -17,19 +18,13 @@ RAW_DATA_PATH = ROOT_DIR / "data" / "raw" / "titanic.csv"
 PROCESSED_DIR = ROOT_DIR / "data" / "processed"
 X_PATH = PROCESSED_DIR / "X.csv"
 Y_PATH = PROCESSED_DIR / "y.csv"
-CONFIG_PATH = ROOT_DIR / "config" / "model.yaml"
 
-
-def main():
+@hydra.main(version_base="1.3", config_path="config", config_name="model")
+def main(cfg: DictConfig):
     print("=== Starting ML Orchestration Pipeline ===\n")
 
-    # --- 1. Load Config & Generate Filenames ---
-    print("[CONFIG] Loading model parameters...")
-    with open(CONFIG_PATH, "r") as file:
-        config = yaml.safe_load(file)
-
-    model_name = config["model"]["name"]
-    model_params = config["model"]["params"]
+    model_name = cfg.model.name
+    model_params = OmegaConf.to_container(cfg.model.params, resolve=True)
 
     param_string = "_".join([f"{k}-{v}" for k, v in model_params.items()])
     artifact_base_name = f"{model_name}_{param_string}"
