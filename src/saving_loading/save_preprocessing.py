@@ -6,6 +6,7 @@ PROCESSED_DATA_DIR = ROOT_DIR / "data" / "processed"
 
 
 def save_data(X, y, X_filename="X_processed.csv", y_filename="y.csv"):
+    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
     # Define paths
     x_path = PROCESSED_DATA_DIR / X_filename
     y_path = PROCESSED_DATA_DIR / y_filename

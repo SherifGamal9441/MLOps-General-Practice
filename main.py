@@ -14,7 +14,7 @@ from src.evaluate import evaluate_model
 
 # Setup paths
 ROOT_DIR = Path(__file__).resolve().parent
-RAW_DATA_PATH = ROOT_DIR / "data" / "raw" / "titanic.csv"
+RAW_DATA_PATH = ROOT_DIR / "data" / "raw" / "train.csv"
 PROCESSED_DIR = ROOT_DIR / "data" / "processed"
 X_PATH = PROCESSED_DIR / "X.csv"
 Y_PATH = PROCESSED_DIR / "y.csv"

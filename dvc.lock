@@ -1,0 +1,28 @@
+schema: '2.0'
+stages:
+  run_pipeline:
+    cmd: python main.py
+    deps:
+    - path: config/model.yaml
+      hash: md5
+      md5: d63c52361bedfd478a58ea9d839a9223
+      size: 96
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 2309cc5f04782ed9bb6016d9f4e381cf
+      size: 61194
+    - path: main.py
+      hash: md5
+      md5: 445ddb0d9794bbf6c3a3848d7b76d63a
+      size: 3025
+    - path: src/
+      hash: md5
+      md5: 2d03fd9227db50870ffcb30df4c3cfe8.dir
+      size: 10392
+      nfiles: 12
+    outs:
+    - path: data/processed/
+      hash: md5
+      md5: e9c11b108e8eb1732ff5c586a0151903.dir
+      size: 101892
+      nfiles: 2
