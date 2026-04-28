@@ -1,0 +1,10 @@
+stages:
+  run_pipeline:
+    cmd: python main.py
+    deps:
+    - config/model.yaml
+    - data/raw/train.csv
+    - main.py
+    - src/
+    outs:
+    - data/processed/
