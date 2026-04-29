@@ -1,5 +1,5 @@
 from src.saving_loading.save_model import save_model
-
+import mlflow.sklearn
 
 def train(model, X, y, artifact_base_name):
     print("Fitting model...")
@@ -9,5 +9,6 @@ def train(model, X, y, artifact_base_name):
     # Add the extension here
     full_filename = f"{artifact_base_name}.joblib"
     save_model(model, filename=full_filename)
-
+    mlflow.sklearn.log_model(model, "model")
+    
     return model

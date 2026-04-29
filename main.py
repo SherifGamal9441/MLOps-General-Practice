@@ -60,7 +60,7 @@ def main(cfg: DictConfig):
         # --- Data Loading ---
         if X_PATH.exists() and Y_PATH.exists():
             X = pd.read_csv(X_PATH)
-            y = pd.read_csv(Y_PATH)
+            y = pd.read_csv(Y_PATH).values.ravel()
         else:
             raw_df = pd.read_csv(RAW_DATA_PATH)
             X_raw = raw_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]

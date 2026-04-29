@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score
 from pathlib import Path
+import mlflow
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 REPORTS_DIR = ROOT_DIR / "reports"
@@ -13,6 +14,7 @@ def evaluate_model(model, X, y, artifact_base_name):
 
     y_pred = model.predict(X)
     accuracy = accuracy_score(y, y_pred)
+    mlflow.log_metric("accuracy", accuracy)
 
     fig, ax = plt.subplots(figsize=(8, 6))
     disp = ConfusionMatrixDisplay.from_estimator(
@@ -36,6 +38,7 @@ def evaluate_model(model, X, y, artifact_base_name):
     report_filename = f"{artifact_base_name}_confusion_matrix.png"
     report_path = REPORTS_DIR / report_filename
 
+    mlflow.log_artifact(report_path)
     plt.savefig(report_path, bbox_inches="tight", dpi=300)
     print(f"Confusion matrix saved to: {report_path}")
     plt.close(fig)

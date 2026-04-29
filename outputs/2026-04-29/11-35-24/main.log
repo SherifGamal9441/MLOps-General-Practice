@@ -1,0 +1,7 @@
+[2026-04-29 11:35:24,032][dagshub.auth.tokens][WARNING] - The added token already exists in the token cache, skipping
+[2026-04-29 11:35:24,661][httpx][INFO] - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[2026-04-29 11:35:24,668][dagshub][INFO] - Accessing as SherifGamal9441
+[2026-04-29 11:35:25,282][httpx][INFO] - HTTP Request: GET https://dagshub.com/api/v1/repos/SherifGamal9441/MLOps-General-Practice "HTTP/1.1 200 OK"
+[2026-04-29 11:35:25,863][httpx][INFO] - HTTP Request: GET https://dagshub.com/api/v1/user "HTTP/1.1 200 OK"
+[2026-04-29 11:35:25,865][dagshub][INFO] - Initialized MLflow to track repo "SherifGamal9441/MLOps-General-Practice"
+[2026-04-29 11:35:25,865][dagshub][INFO] - Repository SherifGamal9441/MLOps-General-Practice initialized!
