@@ -13,3 +13,6 @@ wheels/
 
 # Data
 data
+
+# Credentials
+.env
