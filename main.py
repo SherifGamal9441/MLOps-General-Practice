@@ -9,8 +9,7 @@ import sklearn.ensemble
 import sklearn.linear_model
 import mlflow
 from mlflow.tracking import MlflowClient
-import dagshub
-
+from sklearn.pipeline import Pipeline
 from src.saving_loading.save_preprocessing import save_data
 from src.preprossesor import preprocess
 from src.train import train
@@ -29,17 +28,16 @@ load_dotenv(dotenv_path=env_path)
 @hydra.main(version_base="1.3", config_path="config", config_name="model")
 def main(cfg: DictConfig):
     print("=== Starting ML Orchestration Pipeline ===\n")
+    os.chdir(ROOT_DIR)
+    os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
+    os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN")
+    os.environ["MLFLOW_TRACKING_URI"] = cfg.model.tracking_uri
 
-    dagshub.auth.add_app_token(token=os.getenv("DAGSHUB_TOKEN"))
-    
-    dagshub.init(
-        repo_owner=os.getenv("DAGSHUB_USERNAME"), 
-        repo_name=cfg.model.repo_name, 
-        mlflow=cfg.model.use_mlflow
-    )
-    
     tracking_uri = cfg.model.tracking_uri
     mlflow.set_tracking_uri(tracking_uri)
+
+    experiment_name = "Titanic_Experiments"
+    mlflow.set_experiment(experiment_name)
 
     client = MlflowClient(tracking_uri=tracking_uri)
 
@@ -53,26 +51,22 @@ def main(cfg: DictConfig):
     # --- START MLFLOW RUN ---
     with mlflow.start_run(run_name=model_name):
         print("[MLFLOW] Run started. Logging parameters...")
-        
+        print(f"[MLFLOW] Tracking URI: {mlflow.get_tracking_uri()}")
+        print(f"[MLFLOW] Artifact URI: {mlflow.get_artifact_uri()}") 
         mlflow.log_param("model_type", model_name)
         mlflow.log_params(model_params)
 
         # --- Data Loading ---
-        if X_PATH.exists() and Y_PATH.exists():
-            X = pd.read_csv(X_PATH)
-            y = pd.read_csv(Y_PATH).values.ravel()
-        else:
-            raw_df = pd.read_csv(RAW_DATA_PATH)
-            X_raw = raw_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]
-            y = raw_df['Survived']
-            preprocessor_obj = preprocess() 
-            X_processed_array = preprocessor_obj.fit_transform(X_raw)
-            feature_names = preprocessor_obj.get_feature_names_out()
-            X_processed = pd.DataFrame(X_processed_array, columns=feature_names)
-            save_data(X_processed, y, X_filename="X.csv", y_filename="y.csv")
-            X = X_processed
+        print("📊 Loading RAW data for the Pipeline...")
+        raw_df = pd.read_csv(RAW_DATA_PATH)
+        
+        # Ensure we only pass the exact raw columns the preprocessor expects
+        X = raw_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]
+        y = raw_df['Survived'].values.ravel()
 
         # --- Model Instantiation ---
+        preprocessor_obj = preprocess() 
+        
         if hasattr(sklearn.ensemble, model_name):
             model_class = getattr(sklearn.ensemble, model_name)
         elif hasattr(sklearn.linear_model, model_name):
@@ -82,14 +76,18 @@ def main(cfg: DictConfig):
         
         model = model_class(**model_params)
 
+        model_pipeline = Pipeline(steps=[
+            ('preprocessor', preprocessor_obj),
+            ('classifier', model)
+        ])
+
         # --- Training ---
-        trained_model = train(model, X, y, artifact_base_name)
+        trained_model = train(model_pipeline, X, y, artifact_base_name)
 
         # --- Evaluation ---
         evaluate_model(trained_model, X, y, artifact_base_name)
     
     print("\n=== Pipeline Execution Complete ===")
-
 
 if __name__ == "__main__":
     main()

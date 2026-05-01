@@ -13,16 +13,10 @@ stages:
       size: 61194
     - path: main.py
       hash: md5
-      md5: 0910c7d93213aa327d054087121469b7
-      size: 3206
+      md5: 3d2380403d227f2a4515819a2e7bd5a8
+      size: 3271
     - path: src/
       hash: md5
-      md5: 3eebbf9a9cddb0423523f5fb7aae3bf0.dir
-      size: 10877
-      nfiles: 12
-    outs:
-    - path: data/processed/
-      hash: md5
-      md5: e9c11b108e8eb1732ff5c586a0151903.dir
-      size: 101892
-      nfiles: 2
+      md5: 018ed0aafb55f072ffe3e12f83d8744d.dir
+      size: 16861
+      nfiles: 14

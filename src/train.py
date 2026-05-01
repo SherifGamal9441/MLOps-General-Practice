@@ -9,6 +9,12 @@ def train(model, X, y, artifact_base_name):
     # Add the extension here
     full_filename = f"{artifact_base_name}.joblib"
     save_model(model, filename=full_filename)
-    mlflow.sklearn.log_model(model, "model")
+    try:
+        print("[MLFLOW] Logging model to MLflow...")
+        mlflow.sklearn.log_model(model, name="model")
+        print("[MLFLOW] ✅ log_model succeeded!")
+    except Exception as e:
+        print(f"[MLFLOW] ❌ log_model FAILED: {e}")
+        raise  # re-raise so it doesn't silently pass
     
     return model

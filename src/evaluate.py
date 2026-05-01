@@ -38,8 +38,8 @@ def evaluate_model(model, X, y, artifact_base_name):
     report_filename = f"{artifact_base_name}_confusion_matrix.png"
     report_path = REPORTS_DIR / report_filename
 
+    plt.savefig(report_path, bbox_inches="tight", dpi=300)  # save first
     mlflow.log_artifact(report_path)
-    plt.savefig(report_path, bbox_inches="tight", dpi=300)
     print(f"Confusion matrix saved to: {report_path}")
     plt.close(fig)
 
