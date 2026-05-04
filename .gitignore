@@ -12,7 +12,13 @@ wheels/
 .venv
 
 # Data
-data
+data/raw/*
+data/processed/*
+# EXCEPT the DVC pointer files and Git keep files
+!data/raw/*.dvc
+!data/processed/*.dvc
+!data/**/*.gitignore
+
 
 # Credentials
 .env

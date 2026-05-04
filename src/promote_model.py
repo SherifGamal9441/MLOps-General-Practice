@@ -3,7 +3,7 @@ import mlflow
 from mlflow.tracking import MlflowClient
 import hydra
 from omegaconf import DictConfig
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
 load_dotenv()
 
