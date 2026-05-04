@@ -15,7 +15,11 @@ def train(model, X, y, artifact_base_name, models_dir):
     
     try:
         print("[MLFLOW] Logging model to MLflow cloud...")
-        mlflow.sklearn.log_model(model, "model")
+        mlflow.sklearn.log_model(
+            model, 
+            artifact_path="model", 
+            registered_model_name="Titanic_Production_Model" 
+        )
         print("[MLFLOW] log_model succeeded!")
     except Exception as e:
         print(f"[MLFLOW] log_model FAILED: {e}")
