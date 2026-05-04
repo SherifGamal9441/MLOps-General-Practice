@@ -1,6 +1,6 @@
 stages:
   preprocess:
-    cmd: python src/run_preprocess.py
+    cmd: python -m src.run_preprocess
     deps:
       - src/run_preprocess.py
       - src/preprocessor.py

@@ -1,5 +1,6 @@
 defaults:
-  - paths: paths
+  - paths
+  - _self_
 
 model:
   name: "LogisticRegression"

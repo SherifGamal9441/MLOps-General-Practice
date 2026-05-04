@@ -20,3 +20,69 @@ stages:
       md5: bc428250ca3d47dc1aabd570fa4d43a4.dir
       size: 16879
       nfiles: 14
+  preprocess:
+    cmd: python -m src.run_preprocess
+    deps:
+    - path: data/raw/train.csv
+      hash: md5
+      md5: 2309cc5f04782ed9bb6016d9f4e381cf
+      size: 61194
+    - path: src/preprocessor.py
+      hash: md5
+      md5: e7027b708eb1adc2828b77c34818eb49
+      size: 1159
+    - path: src/run_preprocess.py
+      hash: md5
+      md5: 470b91e9fdbda50faf348efdb3cba5ac
+      size: 1159
+    - path: src/saving_loading/save_preprocessing.py
+      hash: md5
+      md5: eb9c2185a328a12215c7b06a30e19c71
+      size: 692
+    outs:
+    - path: artifacts/preprocessors/preprocessor.joblib
+      hash: md5
+      md5: 56bf2386a79c047c673bdc4b65453c4b
+      size: 3887
+    - path: data/processed/X.csv
+      hash: md5
+      md5: 4ff2c39e602db84c13f4751796dcf024
+      size: 99966
+    - path: data/processed/y.csv
+      hash: md5
+      md5: 97ad279081204a182620d6bf8ccb4230
+      size: 1791
+  train:
+    cmd: python main.py
+    deps:
+    - path: data/processed/X.csv
+      hash: md5
+      md5: 4ff2c39e602db84c13f4751796dcf024
+      size: 99966
+    - path: data/processed/y.csv
+      hash: md5
+      md5: 97ad279081204a182620d6bf8ccb4230
+      size: 1791
+    - path: main.py
+      hash: md5
+      md5: 3b399e67b7fa1e12758d2b8858677abd
+      size: 2022
+    - path: src/evaluate.py
+      hash: md5
+      md5: 1ff32461b6b8d3e7be3e71a910dff3e3
+      size: 1399
+    - path: src/train.py
+      hash: md5
+      md5: 157f8f76424b0aeb6b8913f6560eb88f
+      size: 740
+    outs:
+    - path: artifacts/models/
+      hash: md5
+      md5: b5b2cb21a3d510b95ea598466ab2fa76.dir
+      size: 1247
+      nfiles: 1
+    - path: reports/
+      hash: md5
+      md5: 41b0d2acd0c717952bd101322f0f015c.dir
+      size: 108177
+      nfiles: 1
