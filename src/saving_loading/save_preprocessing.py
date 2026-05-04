@@ -1,31 +1,23 @@
-from pathlib import Path
 import joblib
+import pandas as pd
+from pathlib import Path
 
-# Setup paths dynamically (assuming this file is in 'src')
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-PROCESSED_DATA_DIR = ROOT_DIR / "data" / "processed"
-PREPROCESSORS_DIR = ROOT_DIR / "artifacts" / "preprocessors"
-
-
-def save_data(X, y, X_filename="X.csv", y_filename="y.csv"):
-    PROCESSED_DATA_DIR.mkdir(parents=True, exist_ok=True)
+def save_data(X, y, x_path, y_path):
+    # Ensure the directories exist dynamically
+    Path(x_path).parent.mkdir(parents=True, exist_ok=True)
     
-    x_path = PROCESSED_DATA_DIR / X_filename
-    y_path = PROCESSED_DATA_DIR / y_filename
-
     print("💾 Saving processed datasets...")
     X.to_csv(x_path, index=False)
     y.to_csv(y_path, index=False)
-    print(f"✅ Data saved to: {PROCESSED_DATA_DIR}")
+    print(f"✅ Data saved to: {Path(x_path).parent}")
 
     return None
 
-def save_preprocessor(preprocessor, filename="preprocessor.joblib"):
-    PREPROCESSORS_DIR.mkdir(parents=True, exist_ok=True)
+def save_preprocessor(preprocessor, preprocessor_path):
+    Path(preprocessor_path).parent.mkdir(parents=True, exist_ok=True)
     
-    artifact_path = PREPROCESSORS_DIR / filename
     print("📦 Saving fitted preprocessor artifact...")
-    joblib.save(preprocessor, artifact_path)
-    print(f"✅ Preprocessor saved to: {artifact_path}")
+    joblib.save(preprocessor, preprocessor_path)
+    print(f"✅ Preprocessor saved to: {preprocessor_path}")
 
     return None

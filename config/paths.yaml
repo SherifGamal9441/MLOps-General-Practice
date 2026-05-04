@@ -1,0 +1,6 @@
+raw_data: "data/raw/train.csv"
+processed_X: "data/processed/X.csv"
+processed_y: "data/processed/y.csv"
+models_dir: "artifacts/models"
+preprocessors_dir: "artifacts/preprocessors"
+reports_dir: "reports"

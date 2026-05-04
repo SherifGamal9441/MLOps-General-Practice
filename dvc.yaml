@@ -1,21 +1,24 @@
 stages:
   preprocess:
-    cmd: python src/preprocessor.py
+    cmd: python src/run_preprocess.py
     deps:
+      - src/run_preprocess.py
       - src/preprocessor.py
+      - src/saving_loading/save_preprocessing.py
       - data/raw/train.csv
     outs:
       - data/processed/X.csv
       - data/processed/y.csv
-      - artifacts/preprocessor.joblib
+      - artifacts/preprocessors/preprocessor.joblib
 
   train:
     cmd: python main.py
     deps:
       - main.py
       - src/train.py
+      - src/evaluate.py
       - data/processed/X.csv
       - data/processed/y.csv
     outs:
-      - artifacts/
+      - artifacts/models/
       - reports/

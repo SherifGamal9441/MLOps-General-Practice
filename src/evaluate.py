@@ -3,14 +3,11 @@ from sklearn.metrics import ConfusionMatrixDisplay, accuracy_score
 from pathlib import Path
 import mlflow
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-REPORTS_DIR = ROOT_DIR / "reports"
-
 
 # Add artifact_base_name as a parameter
-def evaluate_model(model, X, y, artifact_base_name):
+def evaluate_model(model, X, y, artifact_base_name, reports_dir):
     print("Evaluating model...")
-    REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    Path(reports_dir).mkdir(parents=True, exist_ok=True)
 
     y_pred = model.predict(X)
     accuracy = accuracy_score(y, y_pred)
@@ -36,11 +33,11 @@ def evaluate_model(model, X, y, artifact_base_name):
 
     # Construct the dynamic filename
     report_filename = f"{artifact_base_name}_confusion_matrix.png"
-    report_path = REPORTS_DIR / report_filename
+    report_path = Path(reports_dir) / report_filename
 
-    plt.savefig(report_path, bbox_inches="tight", dpi=300)  # save first
-    mlflow.log_artifact(report_path)
+    plt.savefig(report_path, bbox_inches="tight", dpi=300)
+    mlflow.log_artifact(str(report_path))
     print(f"Confusion matrix saved to: {report_path}")
     plt.close(fig)
 
-    return report_path
+    return str(report_path)

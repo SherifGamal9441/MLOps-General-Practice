@@ -1,3 +1,6 @@
+defaults:
+  - paths: paths
+
 model:
   name: "LogisticRegression"
   repo_name: "MLOps-General-Practice"

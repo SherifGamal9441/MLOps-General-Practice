@@ -1,23 +1,15 @@
 import joblib
 from pathlib import Path
 
-# Setup paths dynamically (assuming save_model.py is inside the 'src/saving_loading' folder)
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
-ARTIFACTS_DIR = ROOT_DIR / "artifacts"
-
-
-def save_model(model, filename="titanic_model.joblib"):
+def save_model(model, save_path):
     """
     Serializes and saves the trained machine learning model.
     """
-    # Ensure the artifacts directory exists
-    ARTIFACTS_DIR.mkdir(parents=True, exist_ok=True)
-
-    # Construct the full file path
-    save_path = ARTIFACTS_DIR / filename
+    # Ensure the parent directory (artifacts/models) exists
+    Path(save_path).parent.mkdir(parents=True, exist_ok=True)
 
     # Dump the model
     joblib.dump(model, save_path)
-    print(f"Model successfully saved to: {save_path}")
+    print(f" Model successfully saved locally to: {save_path}")
 
     return save_path

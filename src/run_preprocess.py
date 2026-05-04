@@ -1,31 +1,32 @@
+import hydra
+from omegaconf import DictConfig
 import pandas as pd
 from pathlib import Path
+
 from src.preprocessor import preprocess
 from src.saving_loading.save_preprocessing import save_data, save_preprocessor
 
-ROOT_DIR = Path(__file__).resolve().parent.parent
-RAW_DATA_PATH = ROOT_DIR / "data" / "raw" / "train.csv"
-
-def main():
+@hydra.main(version_base="1.3", config_path="../config", config_name="model")
+def main(cfg: DictConfig):
     print("=== Starting Preprocessing Stage ===")
     
-    # 1. Load Data
-    print("📥 Loading raw data...")
-    raw_df = pd.read_csv(RAW_DATA_PATH)
+    # 1. Load Data using Hydra Paths
+    print("Loading raw data...")
+    raw_df = pd.read_csv(cfg.paths.raw_data)
     X = raw_df[['Pclass', 'Sex', 'Age', 'SibSp', 'Parch', 'Fare', 'Embarked']]
     y = raw_df['Survived']
 
-    # 2. Get the Transformer Logic
+    # 2. Fit and Transform
     preprocessor = preprocess()
-
-    # 3. Fit and Transform
-    print("⚙️ Fitting preprocessor and transforming data...")
+    print("Fitting preprocessor and transforming data...")
     X_processed = preprocessor.fit_transform(X)
-    X_processed_df = pd.DataFrame(X_processed) # Convert to DataFrame for easy CSV saving
+    X_processed_df = pd.DataFrame(X_processed)
 
-    # 4. Save Everything
-    save_data(X_processed_df, y)
-    save_preprocessor(preprocessor)
+    # 3. Save Everything using Hydra Paths
+    preprocessor_file = Path(cfg.paths.preprocessors_dir) / "preprocessor.joblib"
+    
+    save_data(X_processed_df, y, cfg.paths.processed_X, cfg.paths.processed_y)
+    save_preprocessor(preprocessor, preprocessor_file)
     
     print("=== Preprocessing Complete ===")
 
