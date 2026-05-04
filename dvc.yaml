@@ -1,8 +1,21 @@
 stages:
-  run_pipeline:
+  preprocess:
+    cmd: python src/preprocessor.py
+    deps:
+      - src/preprocessor.py
+      - data/raw/train.csv
+    outs:
+      - data/processed/X.csv
+      - data/processed/y.csv
+      - artifacts/preprocessor.joblib
+
+  train:
     cmd: python main.py
     deps:
-    - config/model.yaml
-    - data/raw/train.csv
-    - main.py
-    - src/
+      - main.py
+      - src/train.py
+      - data/processed/X.csv
+      - data/processed/y.csv
+    outs:
+      - artifacts/
+      - reports/
