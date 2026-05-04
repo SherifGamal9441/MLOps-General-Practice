@@ -19,6 +19,8 @@ data/processed/*
 !data/processed/*.dvc
 !data/**/*.gitignore
 
+artifacts/
+reports/
 
 # Credentials
 .env
