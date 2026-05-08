@@ -1,0 +1,16 @@
+paths:
+  raw_data: data/raw/train.csv
+  processed_X: data/processed/X.csv
+  processed_y: data/processed/y.csv
+  models_dir: artifacts/models
+  preprocessors_dir: artifacts/preprocessors
+  reports_dir: reports
+model:
+  name: LogisticRegression
+  repo_name: MLOps-General-Practice
+  use_mlflow: true
+  tracking_uri: https://dagshub.com/SherifGamal9441/MLOps-General-Practice.mlflow
+  params:
+    C: 1.0
+    max_iter: 1000
+    random_state: 42

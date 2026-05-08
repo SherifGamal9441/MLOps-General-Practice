@@ -20,7 +20,8 @@ def main(cfg: DictConfig):
     preprocessor = preprocess()
     print("Fitting preprocessor and transforming data...")
     X_processed = preprocessor.fit_transform(X)
-    X_processed_df = pd.DataFrame(X_processed)
+    X_processed_df = pd.DataFrame(X_processed, columns=preprocessor.get_feature_names_out())
+
 
     # 3. Save Everything using Hydra Paths
     preprocessor_file = Path(cfg.paths.preprocessors_dir) / "preprocessor.joblib"

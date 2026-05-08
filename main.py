@@ -20,9 +20,8 @@ def main(cfg: DictConfig):
     # MLflow Auth & Setup
     os.environ["MLFLOW_TRACKING_USERNAME"] = os.getenv("DAGSHUB_USERNAME")
     os.environ["MLFLOW_TRACKING_PASSWORD"] = os.getenv("DAGSHUB_TOKEN")
-    os.environ["MLFLOW_TRACKING_URI"] = cfg.model.tracking_uri
-    mlflow.set_tracking_uri(cfg.model.tracking_uri)
-    mlflow.set_experiment("Titanic_Cloud_Final")
+    mlflow.set_tracking_uri(cfg.model.tracking_uri)  # only once
+    mlflow.set_experiment("Titanic_Cloud_Production")
 
     model_name = cfg.model.name
     model_params = OmegaConf.to_container(cfg.model.params, resolve=True)
@@ -31,7 +30,7 @@ def main(cfg: DictConfig):
 
     with mlflow.start_run(run_name=model_name):
         # 1. Load Processed Data using Hydra Paths
-        print("📊 Loading processed data...")
+        print("Loading processed data...")
         X = pd.read_csv(cfg.paths.processed_X)
         y = pd.read_csv(cfg.paths.processed_y).values.ravel()
 
